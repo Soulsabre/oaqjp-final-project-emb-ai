@@ -1,3 +1,6 @@
+''' Executing this function initiates the emotion detection application
+    over the Flask channel and deployed on localhost:5000
+'''
 # Import Flask, render_template, request for the flask framework package
 from flask import Flask, render_template, request
 
@@ -21,13 +24,14 @@ def sent_detector():
     '''
     analysis_text = request.args.get("textToAnalyze")
     result = emotion_detector(analysis_text)
-    
+
+    if result['dominant_emotion'] == "None":
+        return "Invalid text! Please try again!"
+
     return (f"For the given statement, the system response is 'anger': {result['anger']},"
         f" 'disgust':{result['disgust']}, 'fear': {result['fear']}, 'joy': {result['joy']}"
         f" and 'sadness':{result['sadness']}. The dominant emotion is " 
         f"{result['dominant_emotion']}.")
 
 if __name__ == "__main__":
-    '''This function executes the flask app and deploys it on localhost:5000
-    '''
     app.run(host="0.0.0.0", port="5000", debug=True)
